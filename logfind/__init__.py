@@ -30,13 +30,17 @@ class Logfind:
         paths = []
 
         if not os.path.exists(self.config_file):
-            err = "Could not read your config file: {file}\n".format(file=self.config_file)
-            sys.stderr.write(err)
-            sys.exit(1)
+            open(os.path.join(expanduser("~"), ".logfind"), "a")
 
         with open(self.config_file) as fd:
             for line in fd.readlines():
                 paths.append(line.strip())
+
+        if len(paths) == 0:
+            err_msg = "You need to specify at least 1 search path in {file}\n".format(file=self.config_file)
+            sys.stderr.write(err_msg)
+            sys.exit(1)
+
         return paths
 
     def __all_terms_match(self, filename, matchers):
