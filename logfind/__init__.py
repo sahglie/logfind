@@ -1,5 +1,6 @@
 from os.path import expanduser
 import os.path
+import sys
 import glob
 import re
 
@@ -27,6 +28,12 @@ class Logfind:
 
     def search_paths(self):
         paths = []
+
+        if not os.path.exists(self.config_file):
+            err = "Could not read your config file: {file}\n".format(file=self.config_file)
+            sys.stderr.write(err)
+            sys.exit(1)
+
         with open(self.config_file) as fd:
             for line in fd.readlines():
                 paths.append(line.strip())
